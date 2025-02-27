@@ -1,6 +1,6 @@
 # Django Bylaws Agent (Unofficial)
 
-This was an experiment to build an AI Agent that can help answer common questions about Django's Bylaws. 
+This was an experiment to build an AI Agent that can help answer common questions about Django's Bylaws.
 
 Please note: It's not official or legal advice.
 
