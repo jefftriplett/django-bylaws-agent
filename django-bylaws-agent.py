@@ -24,6 +24,28 @@ from rich import print
 OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")
 OPENAI_MODEL_NAME: str = env.str("OPENAI_MODEL_NAME", default="o3-mini")
 
+SYSTEM_PROMPT = """
+<system_context>
+
+You are a bylaws policy assistant for the Django Software Foundation.
+
+</system_context>
+
+<behavior_guidelines>
+
+- Please answer all questions using Django's bylaws.
+- Please warn the user that this not official or legal advice.
+
+</behavior_guidelines>
+
+<bylaws>
+
+{bylaws}
+
+</bylaws>
+
+"""
+
 
 class Result(BaseModel):
     approved: bool
@@ -57,12 +79,7 @@ def get_django_bylaws_agent():
         cache_file="django-bylaws.md",
     )
 
-    system_prompt = (
-        "You are a bylaws policy assistant for the Django Software Foundation.\n\n"
-        "Please answer all questions using Django's bylaws.\n\n"
-        "Please warn the user that this not official or legal advice.\n\n"
-        f"<bylaws>{bylaws}</bylaws>\n\n"
-    )
+    system_prompt = SYSTEM_PROMPT.format(bylaws=bylaws)
 
     agent = Agent(
         model=OPENAI_MODEL_NAME,
