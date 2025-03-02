@@ -7,12 +7,12 @@ Please note: It's not official or legal advice.
 ## Usage
 
 ```shell
-$ uv run agent.py "How long are director's terms?"
-Approval status: True
+$ uv run agent.py "How long are director terms?"
+Answer: Director terms are for two (2) years.
 
-Reasoning: According to the bylaws of the Django Software Foundation, directors are elected to two (2) year terms. This is stated in Section 4.4.1 under the
-heading 'Term.'
+Reasoning: According to Section 4.4.1 of the Django Software Foundation's Bylaws, directors are elected to two-year terms. This means that once elected, each director
+holds office for a period of two years until their successor is elected or until other circumstances such as resignation or removal occur.
 
 Sections:
-- 4.4.1
+- Section 4.4.1
 ```

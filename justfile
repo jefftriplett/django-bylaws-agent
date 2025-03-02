@@ -8,7 +8,7 @@ export JUST_UNSTABLE := "true"
 
 # Ask the bylaws agent a question
 @ask *ARGS:
-    uv --quiet run agent.py {{ ARGS }}
+    uv --quiet run agent.py "{{ ARGS }}"
 
 # Install pip and uv package management tools
 @bootstrap *ARGS:
@@ -16,7 +16,7 @@ export JUST_UNSTABLE := "true"
 
 # Run a demo with a sample question
 @demo:
-    just ask "How long are director's terms?"
+    just ask "How long are director terms?"
 
 # Format code using just's built-in formatter
 @fmt:
