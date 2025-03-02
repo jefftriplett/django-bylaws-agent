@@ -1,5 +1,5 @@
 [project]
-name = "agent"
+name = "django-bylaws-agent"
 version = "0.1.0"
 description = "Django Bylaws Agent (Unofficial)"
 readme = "README.md"
