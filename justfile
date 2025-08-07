@@ -6,9 +6,13 @@ export JUST_UNSTABLE := "true"
 @_default:
     just --list
 
+# Process with the Django bylaws agent
+@agent *ARGS:
+    uv --quiet run agent.py "{{ ARGS }}"
+
 # Ask the bylaws agent a question
 @ask *ARGS:
-    uv --quiet run agent.py "{{ ARGS }}"
+    just agent "{{ ARGS }}"
 
 # Install pip and uv package management tools
 @bootstrap *ARGS:
