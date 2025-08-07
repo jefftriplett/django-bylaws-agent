@@ -47,10 +47,10 @@ You are a bylaws policy assistant for the Django Software Foundation.
 """
 
 
-class Result(BaseModel):
+class Output(BaseModel):
     answer: str = Field(description="The answer to our question")
     reasoning: str = Field(description="The reasoning and support for our answer based on our source material")
-    sections: list[str] = Field(description="Sections to reference if there is a violation")
+    sections: list[str] = Field(description="Sections to reference")
 
 
 def fetch_and_cache(
@@ -83,7 +83,7 @@ def get_django_bylaws_agent():
 
     agent = Agent(
         model=OPENAI_MODEL_NAME,
-        result_type=Result,
+        output_type=Output,
         system_prompt=system_prompt,
     )
 
@@ -96,13 +96,13 @@ def main(question: str, model_name: str = OPENAI_MODEL_NAME):
     result = agent.run_sync(question)
 
     print(
-        f"[green][bold]Answer:[/bold][/green] {result.data.answer}\n\n"
-        f"[yellow][bold]Reasoning:[/bold][/yellow] {result.data.reasoning}\n"
+        f"[green][bold]Answer:[/bold][/green] {result.output.answer}\n\n"
+        f"[yellow][bold]Reasoning:[/bold][/yellow] {result.output.reasoning}\n"
     )
 
-    if result.data.sections:
+    if result.output.sections:
         print("[yellow][bold]Sections:[/bold][/yellow]")
-        for section in result.data.sections:
+        for section in result.output.sections:
             print(f"- {section}")
 
 
