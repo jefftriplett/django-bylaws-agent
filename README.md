@@ -11,7 +11,7 @@ You can use either the `just ask` command or run the agent directly:
 ```shell
 $ just ask "How long are director terms?"
 # or
-$ uv run agent.py "How long are director terms?"
+$ uv run src/agent.py "How long are director terms?"
 
 Answer: Director terms are for two (2) years.
 
