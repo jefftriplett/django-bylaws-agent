@@ -18,8 +18,9 @@ from pathlib import Path
 from pydantic import BaseModel
 from pydantic import Field
 from pydantic_ai import Agent
-from rich import print
+from rich.console import Console
 
+console = Console()
 
 OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")
 OPENAI_MODEL_NAME: str = env.str("OPENAI_MODEL_NAME", default="gpt-5-mini")
@@ -85,21 +86,41 @@ def get_django_bylaws_agent():
     return agent
 
 
-def main(question: str, model_name: str = OPENAI_MODEL_NAME):
+app = typer.Typer(help="Django Bylaws Agent - Ask questions about DSF bylaws")
+
+
+@app.command()
+def ask(question: str, model_name: str = OPENAI_MODEL_NAME):
+    """Ask the bylaws agent a question."""
     agent = get_django_bylaws_agent()
 
     result = agent.run_sync(question)
 
-    print(
+    console.print(
         f"[green][bold]Answer:[/bold][/green] {result.output.answer}\n\n"
         f"[yellow][bold]Reasoning:[/bold][/yellow] {result.output.reasoning}\n"
     )
 
     if result.output.sections:
-        print("[yellow][bold]Sections:[/bold][/yellow]")
+        console.print("[yellow][bold]Sections:[/bold][/yellow]")
         for section in result.output.sections:
-            print(f"- {section}")
+            console.print(f"- {section}")
+
+
+@app.command()
+def debug():
+    """Print the compiled system prompt for debugging."""
+    bylaws = fetch_and_cache(
+        url="https://media.djangoproject.com/foundation/bylaws.pdf",
+        cache_file="django-bylaws.md",
+    )
+
+    console.print("[bold cyan]===== SYSTEM PROMPT =====[/bold cyan]\n")
+    console.print(SYSTEM_PROMPT)
+    console.print("\n[bold cyan]===== INSTRUCTIONS =====[/bold cyan]\n")
+    console.print(f"<bylaws>\n\n{bylaws}\n\n</bylaws>")
+    console.print("\n[bold cyan]=========================[/bold cyan]")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
