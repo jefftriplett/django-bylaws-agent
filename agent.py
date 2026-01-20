@@ -37,13 +37,6 @@ You are a bylaws policy assistant for the Django Software Foundation.
 - Please warn the user that this not official or legal advice.
 
 </behavior_guidelines>
-
-<bylaws>
-
-{bylaws}
-
-</bylaws>
-
 """
 
 
@@ -79,13 +72,15 @@ def get_django_bylaws_agent():
         cache_file="django-bylaws.md",
     )
 
-    system_prompt = SYSTEM_PROMPT.format(bylaws=bylaws)
-
     agent = Agent(
         model=OPENAI_MODEL_NAME,
         output_type=Output,
-        system_prompt=system_prompt,
+        system_prompt=SYSTEM_PROMPT,
     )
+
+    @agent.instructions
+    def add_bylaws() -> str:
+        return f"<bylaws>\n\n{bylaws}\n\n</bylaws>"
 
     return agent
 
