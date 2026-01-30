@@ -12,7 +12,7 @@
 - **Python version**: Target Python 3.12+
 - **Line length**: 120 characters maximum
 - **Linting**: Use ruff with E (pycodestyle) and F (pyflakes) rules
-- **Formatting**: Follow PEP 8 conventions with ruff 
+- **Formatting**: Follow PEP 8 conventions with ruff
 - **Imports**: Sort imports with ruff
 - **Type hints**: Use static typing throughout codebase
 - **Naming**: Use snake_case for variables/functions, PascalCase for classes
