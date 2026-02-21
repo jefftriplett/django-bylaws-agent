@@ -5,6 +5,7 @@
 #     "httpx",
 #     "environs",
 #     "pydantic-ai-slim[openai]",
+#     "pydantic-ai-slim[web]",
 #     "rich",
 #     "typer",
 # ]
@@ -67,21 +68,26 @@ def fetch_and_cache(
     return contents
 
 
-def get_django_bylaws_agent():
+def load_data():
     bylaws = fetch_and_cache(
         url="https://media.djangoproject.com/foundation/bylaws.pdf",
         cache_file="django-bylaws.md",
     )
+    return {"bylaws": bylaws}
+
+
+def get_agent(*, output_type=Output):
+    data = load_data()
 
     agent = Agent(
         model=OPENAI_MODEL_NAME,
-        output_type=Output,
+        output_type=output_type,
         system_prompt=SYSTEM_PROMPT,
     )
 
     @agent.instructions
     def add_bylaws() -> str:
-        return f"<bylaws>\n\n{bylaws}\n\n</bylaws>"
+        return f"<bylaws>\n\n{data['bylaws']}\n\n</bylaws>"
 
     return agent
 
@@ -92,7 +98,7 @@ app = typer.Typer(help="Django Bylaws Agent - Ask questions about DSF bylaws")
 @app.command()
 def ask(question: str, model_name: str = OPENAI_MODEL_NAME):
     """Ask the bylaws agent a question."""
-    agent = get_django_bylaws_agent()
+    agent = get_agent()
 
     result = agent.run_sync(question)
 
@@ -108,17 +114,29 @@ def ask(question: str, model_name: str = OPENAI_MODEL_NAME):
 
 
 @app.command()
+def web(
+    host: str = "127.0.0.1",
+    port: int = 8080,
+):
+    """Launch the bylaws agent as a web chat interface."""
+    import uvicorn
+
+    agent = get_agent(output_type=None)
+    web_app = agent.to_web()
+
+    console.print(f"[bold green]Starting web interface at http://{host}:{port}[/bold green]")
+    uvicorn.run(web_app, host=host, port=port)
+
+
+@app.command()
 def debug():
     """Print the compiled system prompt for debugging."""
-    bylaws = fetch_and_cache(
-        url="https://media.djangoproject.com/foundation/bylaws.pdf",
-        cache_file="django-bylaws.md",
-    )
+    data = load_data()
 
     console.print("[bold cyan]===== SYSTEM PROMPT =====[/bold cyan]\n")
     console.print(SYSTEM_PROMPT)
     console.print("\n[bold cyan]===== INSTRUCTIONS =====[/bold cyan]\n")
-    console.print(f"<bylaws>\n\n{bylaws}\n\n</bylaws>")
+    console.print(f"<bylaws>\n\n{data['bylaws']}\n\n</bylaws>")
     console.print("\n[bold cyan]=========================[/bold cyan]")
 
 
