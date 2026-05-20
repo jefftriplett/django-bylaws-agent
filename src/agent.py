@@ -94,7 +94,10 @@ def get_agent(*, output_type=Output):
     return agent
 
 
-app = typer.Typer(help="Django Bylaws Agent - Ask questions about DSF bylaws")
+app = typer.Typer(
+    help="Django Bylaws Agent - Ask questions about DSF bylaws",
+    no_args_is_help=True,
+)
 
 
 @app.command()
