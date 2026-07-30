@@ -14,6 +14,10 @@ export JUST_UNSTABLE := "true"
 @debug:
     uv --quiet run src/agent.py debug
 
+# Serve the agent as an MCP server (--transport http for HTTP)
+@mcp *ARGS:
+    uv --quiet run src/agent.py mcp {{ ARGS }}
+
 # Install pip and uv package management tools
 @bootstrap *ARGS:
     pip install --upgrade pip uv
