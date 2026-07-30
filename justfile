@@ -33,3 +33,7 @@ export JUST_UNSTABLE := "true"
 # Run pre-commit checks on files
 @lint *ARGS="--all-files":
     uv --quiet tool run --with pre-commit-uv pre-commit run {{ ARGS }}
+
+# Verify configuration and probe the LLM backend
+@doctor *ARGS:
+    uv --quiet run src/agent.py doctor {{ ARGS }}
