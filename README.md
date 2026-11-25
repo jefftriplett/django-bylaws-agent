@@ -24,8 +24,8 @@ Sections:
 
 ## Environment Variables
 
-- `OPENAI_API_KEY`: Your OpenAI API key (required)
 - `PYDANTIC_AI_MODEL`: Model to use (default: `openai:gpt-5.4-nano`)
+- The API key for that model's provider, e.g. `OPENAI_API_KEY` for the default (see the table below)
 
 `PYDANTIC_AI_MODEL` is a [Pydantic AI model reference](https://ai.pydantic.dev/models/) in
 `provider:model` form. The prefix is required — a bare model name raises `Unknown model` —
@@ -53,8 +53,8 @@ export PYDANTIC_AI_MODEL=deepseek:deepseek-chat
 
 "Works as-is" means the provider runs on the OpenAI SDK this agent already installs, so
 only its API key is needed. The rest need their extra added to `pydantic-ai-slim[...]` in
-the script header of `src/agent.py`. Either way `OPENAI_API_KEY` is read at import, so it
-has to stay set even when another provider does the work.
+the script header of `src/agent.py`. Only the chosen provider's key is needed; `just doctor`
+checks that it is set. `ask --model-name` overrides the model for a single question.
 
 ## Installation
 

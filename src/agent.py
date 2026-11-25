@@ -27,7 +27,6 @@ from rich.console import Console
 
 console = Console()
 
-OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")
 PYDANTIC_AI_MODEL: str = env.str("PYDANTIC_AI_MODEL", default="openai:gpt-5.4-nano")
 
 CACHE_MAX_AGE_HOURS: float = env.float("CACHE_MAX_AGE_HOURS", default=24.0)
@@ -99,11 +98,11 @@ def load_data(*, refresh: bool = False):
     return {"bylaws": bylaws}
 
 
-def get_agent(*, output_type=Output, refresh: bool = False):
+def get_agent(*, output_type=Output, model: str = PYDANTIC_AI_MODEL, refresh: bool = False):
     data = load_data(refresh=refresh)
 
     agent = Agent(
-        model=PYDANTIC_AI_MODEL,
+        model=model,
         output_type=output_type,
         system_prompt=SYSTEM_PROMPT,
     )
@@ -128,7 +127,7 @@ def ask(
     refresh: bool = typer.Option(False, help="Re-fetch the source documents, ignoring the cache."),
 ):
     """Ask the bylaws agent a question."""
-    agent = get_agent(refresh=refresh)
+    agent = get_agent(model=model_name, refresh=refresh)
 
     result = agent.run_sync(question)
 
