@@ -5,7 +5,7 @@
 #     "httpx2",
 #     "environs",
 #     "fastmcp",
-#     "pydantic-ai-slim[openai,web]>=2,<3",
+#     "pydantic-ai-slim[cli,openai,web]>=2,<3",
 #     "rich",
 #     "typer",
 #     "uvicorn",
@@ -140,6 +140,17 @@ def ask(
         console.print("[yellow][bold]Sections:[/bold][/yellow]")
         for section in result.output.sections:
             console.print(f"- {section}")
+
+
+@app.command()
+def chat(
+    refresh: bool = typer.Option(False, help="Re-fetch the source documents, ignoring the cache."),
+):
+    """Chat with the bylaws agent in an interactive shell. Type /exit to quit."""
+    # Same as web: output_type=str gives streamed, conversational replies. The bylaws ride in
+    # @agent.instructions, so they are sent once per turn instead of piling up in the history.
+    agent = get_agent(output_type=str, refresh=refresh)
+    agent.to_cli_sync(prog_name="bylaws")
 
 
 @app.command()

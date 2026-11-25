@@ -22,6 +22,18 @@ Sections:
 - Section 4.4.1
 ```
 
+### Interactive chat
+
+`just chat` opens a shell that remembers the conversation, so follow-up questions work:
+
+```shell
+$ just chat
+bylaws ➤ How long are director terms?
+bylaws ➤ And how many of them are there?
+```
+
+Answers stream in as markdown. Type `/exit` (or press Ctrl-D) to quit, and `/multiline` for longer questions.
+
 ## Environment Variables
 
 - `PYDANTIC_AI_MODEL`: Model to use (default: `openai:gpt-5.4-nano`)

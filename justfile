@@ -10,6 +10,10 @@ export JUST_UNSTABLE := "true"
 @ask *ARGS:
     uv --quiet run src/agent.py ask "{{ ARGS }}"
 
+# Chat with the bylaws agent in an interactive shell
+@chat *ARGS:
+    uv --quiet run src/agent.py chat {{ ARGS }}
+
 # Print the compiled system prompt for debugging
 @debug:
     uv --quiet run src/agent.py debug
